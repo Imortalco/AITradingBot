@@ -4,29 +4,44 @@ from dotenv import load_dotenv
 from constants.fileNames import *
 from nixtla import NixtlaClient
 import matplotlib.pyplot as plt
-#from binance.spot import Spot 
+from plotPredictions import compare_predictions
 
 # Loading .env values
 load_dotenv()
 
 # 1. Instantiate the NixtlaClient
 nixtla_client = NixtlaClient(api_key = os.getenv('NIXTLA_API_KEY'))
+
 #2. Load data from csv
-btc_data = pd.read_csv(BTC_FILE_NAME)
-btc_data['time'] = pd.to_datetime(btc_data['time'], unit='s')
+data = pd.read_csv(COIN_FILE_NAME)
 
-train_btc_data = btc_data[(btc_data['time']>='2018-07-01')&(btc_data['time']<='2022-12-31')]
-test_btc_data = btc_data[(btc_data['time']>='2023-01-01')&(btc_data['time']<='2023-12-31')]
-# 3. Forecast the next 24 hours
-fcst_df = nixtla_client.forecast(df = train_btc_data, 
-                                 h=len(test_btc_data), 
-                                 level=[80, 90],
-                                 freq='B',
-                                 model = 'timegpt-1-long-horizon',
-                                 time_col='time',
-                                 target_col='close')
+train_data = data[(data['time']>='2018-07-01')&(data['time']<='2023-05-31')]
 
-nixtla_client.plot(train_btc_data, fcst_df, models=['TimeGPT'],  level=[80, 90],id_col="BTC", time_col='time', target_col='close').show()
+test_data = data[(data['time']>='2023-06-01')&(data['time']<='2023-12-31')]
 
-plt.subplots()
-plt.show(block=True)
+#region NEW FORECAST
+#NOTE: This is commented so that we don`t call the Nixta API everytime we test the script, in order to get fresh data -> uncomment
+# 3. Forecast the next 6 months
+# fcst_df = nixtla_client.forecast(df = train_data, 
+#                                 h=214, 
+#                                 freq='D',
+#                                 level=[80,90],
+#                                 model = 'timegpt-1-long-horizon',
+#                                 id_col='unique_id',
+#                                 time_col='time',
+#                                 target_col='close')
+
+## Saving the new result in the file
+# if not os.path.exists(PREDICTIONS_FOLDER):
+#     os.makedirs(PREDICTIONS_FOLDER)
+# fcst_df.to_csv(PREDICTIONS_FILE_NAME, index=False)
+#endregion
+
+#region READING OLD FORECAST FROM CSV
+#NOTE: Either read the data from the csv file OR from the result 
+fcst_df = pd.read_csv(PREDICTIONS_FILE_NAME)
+#endregion
+
+print(fcst_df.head())
+compare_predictions(test_data, fcst_df,'close','TimeGPT')
+
