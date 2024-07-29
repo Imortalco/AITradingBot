@@ -5,6 +5,7 @@ PREDICTIONS_FOLDER = 'predictions'
 #Data file names
 COIN_FILE_NAME = f'{CSV_FOLDER}/coin_data'
 PREDICTIONS_FILE_NAME = f'{PREDICTIONS_FOLDER}/coin_predictions'
+PREPROCESSED_PREDICTIONS_FILE_NAME = f'{PREDICTIONS_FOLDER}/preprocess_coin_predictions'
 
 #Data file names
 BTC_FILE_NAME = f"{CSV_FOLDER}/btc_data"

@@ -1,9 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 def calculate_metrics_by_group(group, actual, predicted):
     mae = mean_absolute_error(group[actual], group[predicted])
@@ -13,15 +11,11 @@ def calculate_metrics_by_group(group, actual, predicted):
     return pd.Series({'MAE' : mae, 'MSE': mse, 'RMSE': rmse, 'R2': r2})
 
 def plot_predictions(df, actual_column, prediction_column, key_column, time_col):
-    scaler = MinMaxScaler()
     unique_ids = df[key_column].unique()
     df[time_col] = pd.to_datetime(df[time_col])
     df[actual_column] = pd.to_numeric(df[actual_column], errors='coerce')
     df[prediction_column] = pd.to_numeric(df[prediction_column], errors='coerce')
-    # df[actual_column] = scaler.fit_transform(df[[actual_column]])
-    # df[prediction_column] = scaler.fit_transform(df[[prediction_column]])
     plt.figure(figsize=(15, 15))
-    #plt.yscale('log')
 
     for id in unique_ids:
         group = df[df[key_column] == id]
@@ -36,9 +30,13 @@ def plot_predictions(df, actual_column, prediction_column, key_column, time_col)
     plt.show()
 
 def compare_predictions(df_actual, df_predicted, actual_column, prediction_column, key_column = 'unique_id', time_col = 'time'):
+    df_actual[time_col] = pd.to_datetime(df_actual[time_col], errors='coerce')
+    df_predicted[time_col] = pd.to_datetime(df_predicted[time_col], errors='coerce')
+
     df_merged = pd.merge(df_actual[[key_column, actual_column, time_col]],
                          df_predicted[[key_column, prediction_column, time_col]],
                          on=[key_column, time_col])
+    
     metrics_by_group = df_merged.groupby(key_column).apply(lambda group: calculate_metrics_by_group(group,actual_column, prediction_column)).reset_index()
     print(metrics_by_group)
     plot_predictions(df_merged, actual_column, prediction_column, key_column, time_col)
