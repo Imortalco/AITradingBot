@@ -2,8 +2,6 @@ import pandas as pd
 import torch
 from transformers import TextClassificationPipeline, AutoModelForSequenceClassification, AutoTokenizer, Trainer, TrainingArguments
 from transformers import BertTokenizer, BertForSequenceClassification, pipeline
-from transformers import RobertaTokenizer, RobertaModel
-
 
 # Prerequisits:
 data = pd.read_csv('data/crypto_news/cryptonews.csv')
