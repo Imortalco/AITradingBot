@@ -10,7 +10,6 @@ text_input = data['text'].head(10).tolist()
 print(text_input)
 
 #region ElKulako/cryptobert model:
-#print('\n')
 print('\nElKulako/cryptobert model:')
 model_name = "ElKulako/cryptobert"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
@@ -23,7 +22,6 @@ print(preds)
 #endregion
 
 #region kk08/CryptoBERT model:
-#print('\n')
 print('\nkk08/CryptoBERT model:')
 tokenizer = BertTokenizer.from_pretrained("kk08/CryptoBERT")
 model = BertForSequenceClassification.from_pretrained("kk08/CryptoBERT")
@@ -34,7 +32,6 @@ print(result)
 #endregion
 
 #region ProsusAI/FinBERT
-#print('\n')
 print('\nProsusAI/FinBERT model:')
 tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
@@ -45,7 +42,6 @@ print(result)
 #endregion
 
 #region FacebookAI/roberta-base
-#print('\n')
 print('\nFacebookAI/roberta-base model:')
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 model = AutoModelForSequenceClassification.from_pretrained('roberta-base')

@@ -1,10 +1,10 @@
 import pandas as pd
 import os
 from dotenv import load_dotenv
-from constants.fileNames import *
+from constants.file_names import *
 from nixtla import NixtlaClient
 import matplotlib.pyplot as plt
-from plotPredictions import compare_predictions
+from plot_predictions import compare_predictions
 
 # Loading .env values
 load_dotenv()
